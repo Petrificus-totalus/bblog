@@ -1,0 +1,14 @@
+.App {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  background-image: url("./assets/iron-vmake.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.menu {
+  position: absolute;
+  top: 20%;
+  width: 80%;
+}

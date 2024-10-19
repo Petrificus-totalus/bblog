@@ -1,0 +1,124 @@
+.menuContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  overflow-x: auto;
+  width: 55%;
+  padding: 10px;
+  /* scrollbar-width: thin;
+  scrollbar-color: #006d77 transparent; */
+  border-radius: 20px;
+  padding: 30px 20px;
+
+  background: linear-gradient(
+    to right,
+    rgba(46, 107, 117, 0.5),
+    rgba(169, 5, 38, 0.7)
+  );
+  box-shadow: 0 0 45px rgba(30, 29, 29, 0.9);
+}
+@media (max-width: 768px) {
+  .menuContainer {
+    width: 100%;
+  }
+}
+
+.menuItem {
+  margin-right: 20px;
+  opacity: 1;
+  flex: 1;
+}
+
+.parentItem {
+  position: relative;
+  white-space: nowrap; /* 防止文本换行 */
+  background: inherit; /* 继承父容器的背景 */
+
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  font-size: 2rem;
+  border-bottom: 1px solid #fff;
+  overflow: hidden;
+  clip-path: inset(0 0 0 100%); /* 初始状态：只显示左侧0%的内容 */
+}
+
+/* https://cubic-bezier.com/#.98,0,.87,.11 */
+.menuContainer .menuItem:first-child .parentItem {
+  animation: revealText 0.5s cubic-bezier(0.98, 0, 0.81, 0.11) forwards;
+}
+.menuContainer .menuItem:nth-child(2) .parentItem {
+  animation: revealText 0.1s linear forwards;
+}
+.menuContainer .menuItem:nth-child(3) .parentItem {
+  animation: revealText 0.05s linear forwards;
+}
+
+@keyframes revealText {
+  0% {
+    clip-path: inset(0 0 0 100%); /* 从右边完全遮挡 */
+  }
+  100% {
+    clip-path: inset(0 0 0 0); /* 最终状态：右侧完全显示 */
+  }
+}
+
+.subMenu {
+  margin-top: 30px;
+  height: 35vh;
+  overflow-y: overlay;
+  padding-right: 25px;
+}
+/* .subMenu {
+  scrollbar-width: none; 
+} */
+.subMenu::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none; /* Safari and Chrome */
+}
+
+.subMenuItem {
+  background: inherit; /* 继承父容器的背景 */
+
+  padding: 5px 15px;
+  border-radius: 5px;
+  margin-top: 15px;
+  font-size: 1.6rem;
+
+  text-align: center;
+  color: rgba(255, 255, 255, 0.65); /* 柔和的白色，透明度略高 */
+  animation: fadeInSubItem 0.5s ease-out forwards;
+  opacity: 0;
+  box-shadow: 5px 5px 10px rgba(0, 109, 119, 0.5);
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* 添加过渡效果 */
+}
+
+.subMenuItem:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 8px 8px 15px rgba(0, 109, 119, 0.7);
+  color: rgba(255, 255, 255, 1); /* brighter text */
+}
+
+.subMenuItem:last-child {
+  margin-bottom: 25px;
+}
+@keyframes fadeInSubItem {
+  0% {
+    opacity: 0;
+    transform: translateX(50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.menuContainer::-webkit-scrollbar {
+  height: 8px;
+}
+
+.menuContainer::-webkit-scrollbar-thumb {
+  background: #006d77;
+  border-radius: 4px;
+}
