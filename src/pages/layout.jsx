@@ -5,7 +5,7 @@ import { MailOutlined, SettingOutlined } from "@ant-design/icons";
 
 const HeaderMenu = () => {
   const navigate = useNavigate(); // Hook to navigate programmatically
-  const [current, setCurrent] = useState("/spend");
+  const [current, setCurrent] = useState("expenses");
   const onClick = (e) => {
     console.log("click ", e);
     setCurrent(e.key);
@@ -50,6 +50,7 @@ const HeaderMenu = () => {
       selectedKeys={[current]}
       mode="horizontal"
       items={items}
+      style={{ position: "fixed", top: "0", width: "100%", zIndex: "2000" }}
     />
   );
 };
@@ -57,7 +58,7 @@ export default function layout() {
   return (
     <div>
       <HeaderMenu />
-      <div style={{ padding: "20px" }}>
+      <div style={{ marginTop: "46px" }}>
         <Outlet /> {/* Renders the child routes' components */}
       </div>
     </div>

@@ -2,7 +2,7 @@ import "./Home.css";
 import CoolMenu from "./components/coolMenu/coolmenu";
 
 const menuData = [
-  ["Account", "Spend", "Chart"],
+  ["Account", "Expenses", "Chart"],
   ["Learn", "Algorithm", "h5c3", "Java", "React", "SQL", "Docker", "git"],
   ["Fun", "Jokes", "Swallow"],
 ];

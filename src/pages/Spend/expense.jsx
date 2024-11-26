@@ -1,10 +1,10 @@
-import axios from "axios";
 import CreateSpend from "../../components/createSpend/createspend";
 import React, { useEffect, useState } from "react";
-import styles from "./spend.module.css";
+import styles from "./expense.module.css";
 import moment from "moment";
 import { Card, Tag, Space, Table, Button, Modal, Carousel, Spin } from "antd";
 import AddTag from "../../components/addTransactionTag/addTag";
+import axiosInstance from "../../axiosInstance.js";
 
 export default function Expense() {
   const [transactions, setTransactions] = useState([]);
@@ -12,18 +12,10 @@ export default function Expense() {
   const [totalPages, setTotalPages] = useState(0);
   const [spin, setSpin] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [currentRecord, setCurrentRecord] = useState({
-    title: "",
-    location: "",
-    price: "",
-    tags: [],
-    description: "",
-    links: [],
-  });
+  const [currentRecord, setCurrentRecord] = useState({});
 
   const columns = [
     {
-      title: "Title",
       dataIndex: "title",
       key: "title",
       render: (text) => <span>{text}</span>,
@@ -34,13 +26,11 @@ export default function Expense() {
       key: "location",
     },
     {
-      title: "Price",
       dataIndex: "price",
       key: "price",
       render: (text) => <span>{parseFloat(text).toFixed(2)}</span>,
     },
     {
-      title: "Tags",
       key: "tags",
       dataIndex: "tags",
       render: (tags) => (
@@ -54,7 +44,6 @@ export default function Expense() {
       ),
     },
     {
-      title: "Action",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
@@ -67,7 +56,7 @@ export default function Expense() {
   ];
 
   const showModal = (id) => {
-    axios.get(`http://localhost:5207/api/Spend/${id}`).then((res) => {
+    axiosInstance.get(`/Spend/${id}`).then((res) => {
       setCurrentRecord(res.data);
       console.log(res.data);
 
@@ -82,10 +71,8 @@ export default function Expense() {
   const getTransactions = async (page) => {
     setSpin(true);
 
-    let res = await axios.get(
-      `http://localhost:5207/api/Spend?PageNumber=${page}`
-    );
-    // console.log(res.data);
+    let res = await axiosInstance.get(`/Spend?PageNumber=${page}`);
+    console.log(res.data);
 
     const { data } = res;
     setTransactions(data);
@@ -134,14 +121,14 @@ export default function Expense() {
             <Card
               title={moment(createTime).format("YYYY-MM-DD")}
               hoverable
-              extra={<strong>{total.toFixed(2)}</strong>}
+              extra={<strong>{total.toFixed(1)}</strong>}
               key={createTime}
               style={{ marginBottom: "20px" }}
             >
               <Table
                 columns={columns}
                 dataSource={items}
-                rowKey={(record) => record.title + record.location}
+                rowKey="id"
                 showHeader={false}
                 pagination={false}
               />
@@ -156,7 +143,7 @@ export default function Expense() {
               <img
                 key={item.id}
                 alt="transaction"
-                src={`https://myblogprobiotics.s3.ap-southeast-2.amazonaws.com/${item.link}`}
+                src={`${process.env.REACT_APP_NEXT_AWS_S3_BASEURL}${item.link}`}
               />
             ))}
           </Carousel>
