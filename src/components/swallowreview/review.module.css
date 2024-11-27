@@ -1,0 +1,142 @@
+.reviewCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 15px;
+  box-shadow: 5px 10px 10px rgba(0, 255, 200, 0.3);
+  padding: 20px;
+  max-width: 300px;
+  margin: 20px;
+  background: linear-gradient(145deg, #1b1f2a, #2e3440);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reviewCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 255, 200, 0.4);
+}
+
+.coverImage {
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 255, 200, 0.2);
+  width: 100%; /* Make cover image responsive */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.ratingContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ratingNumber {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #83c5be;
+  opacity: 0;
+  animation: showRatingNumber 0.2s ease-out forwards 0.3s; /* 数字先出现 */
+}
+
+.ratingCircle {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #83c5be;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  animation: showRatingCircle 0.2s ease-out forwards 0.5s; /* 圈后出现 */
+}
+
+@keyframes showRatingNumber {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes showRatingCircle {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.info {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.info .restaurant {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #00ffcc;
+}
+
+.info .rating {
+  color: #ffcc00;
+  font-size: 1.1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.info .summary {
+  font-style: italic;
+  color: #aaa;
+  word-break: break-word; /* 允许换行 */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .reviewCard {
+    max-width: 100%; /* Allow the card to use full width on small screens */
+    margin: 10px; /* Reduce margin for better fit */
+    padding: 15px; /* Adjust padding for smaller screens */
+  }
+  .info {
+    margin-top: 3px;
+  }
+  .info .restaurant {
+    font-size: 0.8em; /* Slightly reduce font size for smaller screens */
+  }
+
+  .info .rate {
+    font-size: 0.5em; /* Slightly reduce font size for smaller screens */
+  }
+
+  .info .summary {
+    font-size: 0.9em; /* Slightly reduce font size for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .reviewCard {
+    padding: 10px; /* Further reduce padding for very small screens */
+  }
+  .info {
+    margin-top: 3px;
+  }
+  .info .restaurant {
+    font-size: 0.6em; /* Further reduce font size for very small screens */
+  }
+
+  .info .rate {
+    font-size: 0.5em; /* Further reduce font size for very small screens */
+  }
+
+  .info .summary {
+    font-size: 0.8em; /* Further reduce font size for very small screens */
+  }
+}

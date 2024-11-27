@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { Menu } from "antd";
-import { MailOutlined, SettingOutlined } from "@ant-design/icons";
+import { ReadOutlined, DollarOutlined, ShopOutlined } from "@ant-design/icons";
 
 const HeaderMenu = () => {
   const navigate = useNavigate(); // Hook to navigate programmatically
@@ -22,7 +22,7 @@ const HeaderMenu = () => {
     {
       label: "Spend",
       key: "spend",
-      icon: <SettingOutlined />,
+      icon: <DollarOutlined />,
       children: [
         {
           label: "Expenses",
@@ -37,7 +37,7 @@ const HeaderMenu = () => {
     {
       label: "Learn",
       key: "learn",
-      icon: <MailOutlined />,
+      icon: <ReadOutlined />,
       children: [
         {
           label: "SQL",
@@ -48,6 +48,11 @@ const HeaderMenu = () => {
           key: "algorithm",
         },
       ],
+    },
+    {
+      label: "Swallow",
+      key: "swallow",
+      icon: <ShopOutlined />,
     },
   ];
 

@@ -5,6 +5,8 @@ import Home from "./Home";
 import Expense from "./pages/Spend/expense";
 import Algorithm from "./pages/Learn/algorithm";
 import Chart from "./pages/Spend/chart";
+import Swallow from "./pages/Swallow/swallow";
+
 import Layout from "./pages/layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -28,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "algorithm",
         element: <Algorithm />,
+      },
+      {
+        path: "swallow",
+        element: <Swallow />,
       },
     ],
   },
