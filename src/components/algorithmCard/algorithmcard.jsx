@@ -3,9 +3,9 @@ import styles from "./algoCard.module.css";
 import { Tag } from "antd";
 
 export default function Algorithmcard({ params, showDetail }) {
-  const { desc, labels } = params;
+  const { desc, labels, id } = params;
   return (
-    <div className={styles.container} onClick={() => showDetail(params)}>
+    <div className={styles.container} onClick={() => showDetail(id)}>
       <div className={styles.desc}>{desc}</div>
 
       <div className={styles.content}>
