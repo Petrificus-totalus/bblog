@@ -1,0 +1,38 @@
+.container {
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.desc {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 12px;
+  font-weight: 500;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #fff;
+  word-wrap: break-word; /* 允许在长单词或 URL 内部进行断行 */
+  white-space: normal; /* 文本正常换行 */
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.tag {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}

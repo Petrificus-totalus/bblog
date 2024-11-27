@@ -1,0 +1,27 @@
+.container {
+  overflow: auto;
+  height: 100vh;
+  background-image: url("../../assets/iron-vmake.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.header {
+  display: flex;
+  background: #fff;
+  gap: 15px;
+  padding: 20px;
+  position: fixed; /* 固定位置 */
+  top: 46px; /* 顶部对齐 */
+  width: 100%; /* 宽度为100% */
+  z-index: 1000;
+}
+
+.content {
+  margin-top: 85px;
+  padding: 0 28px;
+}
+
+.selector {
+  width: 220px;
+  margin: 0 20px;
+}

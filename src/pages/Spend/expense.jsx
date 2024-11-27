@@ -58,8 +58,6 @@ export default function Expense() {
   const showModal = (id) => {
     axiosInstance.get(`/Spend/${id}`).then((res) => {
       setCurrentRecord(res.data);
-      console.log(res.data);
-
       setIsModalVisible(true);
     });
   };
@@ -75,10 +73,10 @@ export default function Expense() {
     console.log(res.data);
 
     const { data } = res;
-    setTransactions(data);
+    setTransactions(data.data);
 
-    if (data.length === 0) setTotalPages(0);
-    else setTotalPages(data[0].totalPages);
+    setTotalPages(data.totalPages);
+
     setSpin(false);
   };
 
