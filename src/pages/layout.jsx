@@ -8,13 +8,13 @@ const HeaderMenu = () => {
   const location = useLocation(); // Hook to get the current location
   const [current, setCurrent] = useState(location.pathname.slice(1)); // Initialize with current path
 
-  // Sync `current` with the location path
+  // Sync current with the location path
   useEffect(() => {
     setCurrent(location.pathname.slice(1)); // Remove leading '/'
   }, [location]);
 
   const onClick = (e) => {
-    setCurrent(e.key); // Update `current` state
+    setCurrent(e.key); // Update current state
     navigate(`/${e.key}`); // Navigate to the selected path
   };
 

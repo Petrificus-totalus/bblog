@@ -11,8 +11,6 @@ import Markdown from "markdown-to-jsx";
 import axiosInstance from "../../axiosInstance";
 import Code from "../../components/Code/code";
 
-const { Option } = Select;
-
 const Algorithm = () => {
   const contentRef = useRef(null);
   const [data, setData] = useState([]);
@@ -60,14 +58,10 @@ const Algorithm = () => {
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      const formData = new FormData();
+      const json = { ...values, Content: markdown };
+      const { data } = await axiosInstance.post("/algorithm", json);
+      console.log(data);
 
-      Object.keys(values).forEach((key) => {
-        formData.append(key, values[key]);
-      });
-      formData.append("markdown", markdown);
-
-      await axiosInstance.post("/algorithm", formData);
       setIsModalOpen(false);
       form.resetFields();
       setMarkdown("");
@@ -142,7 +136,7 @@ const Algorithm = () => {
         onCancel={() => setIsModalOpen(false)}
       >
         <Form form={form}>
-          <Form.Item name="tags">
+          <Form.Item name="Labels">
             <Select
               placeholder="Select Tags"
               mode="multiple"
@@ -153,32 +147,12 @@ const Algorithm = () => {
             />
           </Form.Item>
           <Form.Item
-            name="description"
+            name="Desc"
             rules={[{ required: true, message: "Please input Intro" }]}
           >
             <Input.TextArea showCount maxLength={100} />
           </Form.Item>
-          <Row gutter={16}>
-            <Col span={8}>
-              <Form.Item
-                name="difficulty"
-                rules={[
-                  { required: true, message: "Please choose Difficulty" },
-                ]}
-              >
-                <Select placeholder="Select Difficulty">
-                  <Option value="easy">Easy</Option>
-                  <Option value="medium">Medium</Option>
-                  <Option value="hard">Hard</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col>
-              <Form.Item name="link">
-                <Input placeholder="Link" />
-              </Form.Item>
-            </Col>
-          </Row>
+
           <Form.Item>
             <MdEditor
               style={{ height: "300px" }}
