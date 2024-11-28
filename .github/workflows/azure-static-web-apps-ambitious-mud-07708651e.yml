@@ -32,6 +32,13 @@ jobs:
           api_location: "api" # Api source code path - optional
           output_location: "build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+        env: 
+          REACT_APP_NEXT_AWS_S3_BASEURL: https://myblogprobiotics.s3.ap-southeast-2.amazonaws.com/
+          NEXT_AWS_S3_REGION: ap-southeast-2
+          NEXT_AWS_S3_ACCESS_KEY_ID: AKIAZPUNN5KRCT6LW7P6
+          NEXT_AWS_S3_SECRET_ACCESS_KEY: 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
+          NEXT_AWS_S3_BUCKET_NAME: myblogprobiotics
+          PORT: 8080
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
