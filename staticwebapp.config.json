@@ -1,8 +1,6 @@
 {
-  "routes": [
-    {
-      "route": "/swallow",
-      "rewrite": "/swallow.html"
-    }
-  ]
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["*.{css,jpg,gif,png,ico,svg,gif}", "assets/*"]
+  }
 }
