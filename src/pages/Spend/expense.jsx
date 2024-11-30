@@ -154,12 +154,13 @@ export default function Expense() {
                       showModal(record.id, record.tags);
                     }
                   },
-                  style: {
-                    cursor:
-                      isMobile && record.hasDetail ? "pointer" : "not-allowed", // 根据 hasDetail 设置指针样式
-                    background:
-                      isMobile && record.hasDetail ? "inherit" : "#f5f5f5", // 无效行背景变灰
-                  },
+                  ...(isMobile && {
+                    // 仅在 isMobile 为 true 时设置样式
+                    style: {
+                      cursor: record.hasDetail ? "pointer" : "not-allowed", // 根据 hasDetail 设置指针样式
+                      background: record.hasDetail ? "inherit" : "#f5f5f5", // 无效行背景变灰
+                    },
+                  }),
                 })}
               />
             </Card>
