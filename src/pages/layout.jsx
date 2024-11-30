@@ -62,7 +62,13 @@ const HeaderMenu = () => {
       selectedKeys={[current]} // Highlight the current menu item
       mode="horizontal"
       items={items}
-      style={{ position: "fixed", top: "0", width: "100%", zIndex: "2000" }}
+      style={{
+        width: "100vw",
+        position: "fixed",
+        top: "0",
+        width: "100%",
+        zIndex: "2000",
+      }}
     />
   );
 };

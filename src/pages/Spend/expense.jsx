@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./expense.module.css";
 import moment from "moment";
 import { Card, Tag, Space, Table, Button, Modal, Carousel, Spin } from "antd";
-import AddTag from "../../components/addTransactionTag/addTag";
 import axiosInstance from "../../axiosInstance.js";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 
 export default function Expense() {
   const [transactions, setTransactions] = useState([]);
@@ -13,6 +13,7 @@ export default function Expense() {
   const [spin, setSpin] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentRecord, setCurrentRecord] = useState({});
+  const isMobile = window.innerWidth <= 758;
 
   const columns = [
     {
@@ -28,36 +29,43 @@ export default function Expense() {
     {
       dataIndex: "price",
       key: "price",
-      render: (text) => <span>{parseFloat(text).toFixed(2)}</span>,
+      render: (text) => <span>{parseFloat(text).toFixed(1)}</span>,
     },
-    {
-      key: "tags",
-      dataIndex: "tags",
-      render: (tags) => (
-        <>
-          {tags.map((tag) => (
-            <Tag color="blue" key={tag.id}>
-              {tag.tagName}
-            </Tag>
-          ))}
-        </>
-      ),
-    },
-    {
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          {record.hasDetail && (
-            <Button onClick={() => showModal(record.id)}>View Details</Button>
-          )}
-        </Space>
-      ),
-    },
+
+    ...(isMobile
+      ? []
+      : [
+          {
+            key: "tags",
+            dataIndex: "tags",
+            render: (tags) => (
+              <>
+                {tags.map((tag) => (
+                  <Tag color="blue" key={tag.id}>
+                    {tag.tagName}
+                  </Tag>
+                ))}
+              </>
+            ),
+          },
+          {
+            key: "action",
+            render: (_, record) => (
+              <Space size="middle">
+                {record.hasDetail && (
+                  <Button onClick={() => showModal(record.id, record.tags)}>
+                    View Details
+                  </Button>
+                )}
+              </Space>
+            ),
+          },
+        ]),
   ];
 
-  const showModal = (id) => {
+  const showModal = (id, tags) => {
     axiosInstance.get(`/Spend/${id}`).then((res) => {
-      setCurrentRecord(res.data);
+      setCurrentRecord({ ...res.data, tags });
       setIsModalVisible(true);
     });
   };
@@ -70,9 +78,10 @@ export default function Expense() {
     setSpin(true);
 
     let res = await axiosInstance.get(`/Spend?PageNumber=${page}`);
-    console.log(res.data);
 
     const { data } = res;
+    console.log(data);
+
     setTransactions(data.data);
 
     setTotalPages(data.totalPages);
@@ -95,12 +104,9 @@ export default function Expense() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div className={styles.buttons}>
-          <CreateSpend finish={() => getTransactions(currentPage)} />
-          <AddTag />
-        </div>
+        <CreateSpend finish={() => getTransactions(currentPage)} />
 
-        <div>
+        <div className={styles.pagebuttons}>
           <Button
             style={{ marginRight: "10px" }}
             onClick={handlePrev}
@@ -112,6 +118,19 @@ export default function Expense() {
             Next
           </Button>
         </div>
+        <div className={styles.pagebuttonssmall}>
+          <Button
+            style={{ marginRight: "2px" }}
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+            icon={<LeftOutlined />}
+          ></Button>
+          <Button
+            onClick={handleNext}
+            disabled={currentPage === totalPages}
+            icon={<RightOutlined />}
+          ></Button>
+        </div>
       </div>
       <div className={styles.content}>
         <Spin spinning={spin}>
@@ -121,7 +140,7 @@ export default function Expense() {
               hoverable
               extra={<strong>{total.toFixed(1)}</strong>}
               key={createTime}
-              style={{ marginBottom: "20px" }}
+              style={{ marginBottom: "20px", overflowX: "scroll" }}
             >
               <Table
                 columns={columns}
@@ -129,6 +148,19 @@ export default function Expense() {
                 rowKey="id"
                 showHeader={false}
                 pagination={false}
+                onRow={(record) => ({
+                  onClick: () => {
+                    if (isMobile && record.hasDetail) {
+                      showModal(record.id, record.tags);
+                    }
+                  },
+                  style: {
+                    cursor:
+                      isMobile && record.hasDetail ? "pointer" : "not-allowed", // 根据 hasDetail 设置指针样式
+                    background:
+                      isMobile && record.hasDetail ? "inherit" : "#f5f5f5", // 无效行背景变灰
+                  },
+                })}
               />
             </Card>
           ))}
@@ -146,6 +178,11 @@ export default function Expense() {
             ))}
           </Carousel>
         )}
+        {currentRecord?.tags?.map((item) => (
+          <Tag color="blue" key={item.id}>
+            {item.tagName}
+          </Tag>
+        ))}
         {currentRecord?.description && <p>{currentRecord.description}</p>}
       </Modal>
     </div>

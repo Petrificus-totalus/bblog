@@ -9,6 +9,19 @@
 
 .menu {
   position: absolute;
+  left: 2%;
   top: 20%;
-  width: 80%;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .App {
+    background-image: url("./assets/homeBG.jpg");
+  }
+  .menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }

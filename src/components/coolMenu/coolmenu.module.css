@@ -3,7 +3,6 @@
   flex-direction: row-reverse;
   overflow-x: auto;
   width: 55%;
-  padding: 10px;
   /* scrollbar-width: thin;
   scrollbar-color: #006d77 transparent; */
   border-radius: 20px;
@@ -15,11 +14,6 @@
     rgba(169, 5, 38, 0.7)
   );
   box-shadow: 0 0 45px rgba(30, 29, 29, 0.9);
-}
-@media (max-width: 768px) {
-  .menuContainer {
-    width: 100%;
-  }
 }
 
 .menuItem {
@@ -36,7 +30,7 @@
   text-align: center;
   color: rgba(255, 255, 255, 0.9);
   padding: 10px;
-  font-size: 2rem;
+  font-size: 1.8rem;
   border-bottom: 1px solid #fff;
   overflow: hidden;
   clip-path: inset(0 0 0 100%); /* 初始状态：只显示左侧0%的内容 */
@@ -64,13 +58,13 @@
 
 .subMenu {
   margin-top: 30px;
-  height: 35vh;
+  /* height: 35vh; */
   overflow-y: overlay;
   padding-right: 25px;
 }
-/* .subMenu {
-  scrollbar-width: none; 
-} */
+.subMenu {
+  scrollbar-width: none;
+}
 .subMenu::-webkit-scrollbar {
   width: 0;
   height: 0;
@@ -121,4 +115,98 @@
 .menuContainer::-webkit-scrollbar-thumb {
   background: #006d77;
   border-radius: 4px;
+}
+
+/* 小屏幕规则 */
+@media (max-width: 768px) {
+  .menuContainer {
+    width: 90%; /* 减少宽度以适配窄屏 */
+    padding: 20px 10px;
+    flex-direction: column; /* 改为垂直布局 */
+    margin: 0 auto; /* 居中显示 */
+    max-height: 80vh; /* 限制容器高度，保证滚动效果 */
+    overflow-y: auto; /* 启用垂直滚动 */
+    scrollbar-width: none; /* 隐藏滚动条 (Firefox) */
+    background: linear-gradient(
+      to bottom,
+      rgba(33, 74, 112, 0.4),
+      rgba(252, 174, 93, 0.4)
+    );
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* 柔和阴影 */
+    border-radius: 15px;
+  }
+  .menuContainer::-webkit-scrollbar {
+    display: none; /* 隐藏滚动条 (Chrome, Safari) */
+  }
+
+  .menuItem {
+    margin-top: 0;
+    margin-right: 0; /* 移除右边距 */
+    margin-bottom: 15px; /* 添加底部间距 */
+    flex: none; /* 不让项目扩展 */
+  }
+
+  .parentItem {
+    font-size: 1.6rem;
+    color: rgba(255, 255, 255, 0.85); /* 柔和的白色 */
+    text-align: center;
+    background: inherit; /* 半透明深蓝色 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+  }
+
+  .subMenu {
+    height: auto; /* 自适应高度 */
+    margin-top: 5px;
+    padding: 0 10%;
+  }
+
+  .subMenuItem {
+    box-shadow: 3px 3px 10px rgba(195, 193, 249, 0.5);
+
+    background: rgba(163, 92, 112, 0.2);
+    font-size: 1.4rem; /* 缩小字体大小 */
+  }
+}
+
+/* 平板规则 */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .menuContainer {
+    width: 75%; /* 减小宽度 */
+    padding: 25px 15px;
+  }
+
+  .parentItem {
+    font-size: 2rem; /* 调整字体 */
+    padding: 10px;
+  }
+
+  .subMenu {
+    margin-top: 25px;
+    padding-right: 20px;
+  }
+
+  .subMenuItem {
+    font-size: 1.5rem; /* 调整字体大小 */
+    padding: 10px;
+  }
+}
+
+/* 针对超小屏幕（如 400px 以下设备） */
+@media (max-width: 400px) {
+  .menuContainer {
+    width: 100%; /* 占满屏幕宽度 */
+    padding: 15px 5px;
+    margin: 0 auto;
+  }
+
+  .parentItem {
+    font-size: 1.5rem; /* 再次缩小字体 */
+    padding: 5px;
+  }
+
+  .subMenuItem {
+    font-size: 1.2rem; /* 再次缩小字体 */
+    padding: 5px;
+  }
 }
