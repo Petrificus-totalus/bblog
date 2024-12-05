@@ -1,8 +1,8 @@
-"use client";
 import React, { useState } from "react";
-import { Modal, Button, Form, Input, DatePicker, Select } from "antd";
+import { Modal, Button, Form, Input, DatePicker, Select, Upload } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import moment from "moment";
-import S3UploadForm from "../S3UploadForm/uploadForm";
+import axiosInstance from "../../axiosInstance";
 
 const { Option } = Select;
 
@@ -10,13 +10,12 @@ const UploadSpend = ({ finish }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [tags, setTags] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [uploading, setUploading] = useState(false);
+  const [fileList, setFileList] = useState([]);
 
   const showModal = async () => {
     setIsModalOpen(true);
-    const response = await fetch("/api/tags");
-    const { data } = await response.json();
+    const response = await axiosInstance.get("/tags");
+    const { data } = response;
     setTags(data);
   };
 
@@ -24,85 +23,108 @@ const UploadSpend = ({ finish }) => {
     try {
       const values = await form.validateFields();
 
-      if (!values.description) values.description = "";
-      values.date = moment(values.date.toDate()).format("YYYY-MM-DD");
-      const formData = new FormData();
-      for (var key in values) {
-        formData.append(key, values[key]);
-      }
-      formData.append("files", files);
-      await fetch("/api/spend", {
-        method: "POST",
-        body: formData,
-      });
+      if (!values.Description) values.Description = "";
+      values.CreateTime = moment(values.CreateTime).format("YYYY-MM-DD");
 
-      setIsModalOpen(false);
-      await finish();
+      // Upload images to S3
+      const uploadedImages = await Promise.all(
+        fileList.map(async (file) => {
+          const formData = new FormData();
+          formData.append("file", file.originFileObj);
+          const res = await axiosInstance.post("/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data", // Ensure proper headers
+            },
+          }); // Replace with your S3 API endpoint
+
+          return res.data.url; // Assuming your API returns the S3 URL
+        })
+      );
+      console.log(uploadedImages);
+
+      const payload = {
+        ...values,
+        PictureLinks: uploadedImages, // Attach uploaded images' URLs
+      };
+      console.log(payload);
+
+      await axiosInstance.post("/spend", payload);
+
       form.resetFields();
-      setFiles([]);
+      setFileList([]);
+      setIsModalOpen(false);
+      finish();
     } catch (error) {
-      console.log("Error uploading data:", error);
+      console.error("Error uploading data:", error);
     }
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    form.resetFields();
+    setFileList([]);
   };
 
   const modalFooter = [
     <Button key="back" onClick={handleCancel}>
       Cancel
     </Button>,
-    <Button key="submit" type="primary" onClick={handleOk} disabled={uploading}>
+    <Button key="submit" type="primary" onClick={handleOk}>
       Add Transaction
     </Button>,
   ];
+
+  const handleFileChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
 
   return (
     <>
       <Button type="primary" onClick={showModal}>
         Add Transaction
       </Button>
-      <Modal
-        title="Add Transaction"
-        open={isModalOpen}
-        footer={modalFooter}
-        onCancel={handleCancel}
-      >
+      <Modal open={isModalOpen} footer={modalFooter} onCancel={handleCancel}>
         <Form form={form} layout="vertical">
-          <Form.Item name="date" label="Purchase Date">
+          <Form.Item name="CreateTime" label="Purchase Date">
             <DatePicker />
           </Form.Item>
-          <Form.Item name="title" label="title" rules={[{ required: true }]}>
+          <Form.Item name="Title" label="Title" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
           <Form.Item
-            name="location"
+            name="Location"
             label="Location"
             rules={[{ required: true }]}
           >
             <Input />
           </Form.Item>
-          <Form.Item name="price" label="Price" rules={[{ required: true }]}>
+          <Form.Item name="Price" label="Price" rules={[{ required: true }]}>
             <Input type="number" />
           </Form.Item>
-          <Form.Item name="tags" label="Tags">
+          <Form.Item name="Tags" label="Tags">
             <Select mode="multiple" placeholder="Select tags">
               {tags.map((item) => (
-                <Option value={item.tagID} key={item.tagID}>
-                  {item.tag}
+                <Option value={item.id} key={item.id}>
+                  {item.tagName}
                 </Option>
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name="description" label="Description">
+          <Form.Item name="Description" label="Description">
             <Input.TextArea />
           </Form.Item>
+          <Form.Item label="Upload Pictures">
+            <Upload
+              multiple
+              listType="picture-card"
+              fileList={fileList}
+              onChange={handleFileChange}
+              beforeUpload={() => false} // Prevent automatic upload
+            >
+              {fileList.length >= 5 ? null : <PlusOutlined />}
+            </Upload>
+          </Form.Item>
         </Form>
-        <S3UploadForm setFiles={setFiles} setUploading={setUploading} />
-        {files.map((item) => (
-          <div key={item}>{item}</div>
-        ))}
       </Modal>
     </>
   );
