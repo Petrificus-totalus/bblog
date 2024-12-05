@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button, Form, Input, DatePicker, Select, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import moment from "moment";
 import axiosInstance from "../../axiosInstance";
 
 const { Option } = Select;
@@ -24,7 +23,8 @@ const UploadSpend = ({ finish }) => {
       const values = await form.validateFields();
 
       if (!values.Description) values.Description = "";
-      values.CreateTime = moment(values.CreateTime).format("YYYY-MM-DD");
+      values.CreateTime = values.CreateTime.format("YYYY-MM-DD");
+      console.log("values", values);
 
       // Upload images to S3
       const uploadedImages = await Promise.all(
@@ -40,13 +40,11 @@ const UploadSpend = ({ finish }) => {
           return res.data.url; // Assuming your API returns the S3 URL
         })
       );
-      console.log(uploadedImages);
 
       const payload = {
         ...values,
         PictureLinks: uploadedImages, // Attach uploaded images' URLs
       };
-      console.log(payload);
 
       await axiosInstance.post("/spend", payload);
 
