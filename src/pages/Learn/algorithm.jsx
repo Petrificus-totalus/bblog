@@ -10,6 +10,7 @@ import { masonryCol } from "../../lib/constant";
 import Markdown from "markdown-to-jsx";
 import axiosInstance from "../../axiosInstance";
 import Code from "../../components/Code/code";
+import markdownOptions from "../../lib/markdownOptions.js";
 
 const Algorithm = () => {
   const contentRef = useRef(null);
@@ -197,15 +198,7 @@ const Algorithm = () => {
                 <Tag key={item.id}>{item.name}</Tag>
               ))}
             </div>
-            <Markdown
-              options={{
-                overrides: {
-                  code: { component: Code },
-                },
-              }}
-            >
-              {detail.content}
-            </Markdown>
+            <Markdown options={markdownOptions}>{detail.content}</Markdown>
           </div>
         )}
       </Modal>
