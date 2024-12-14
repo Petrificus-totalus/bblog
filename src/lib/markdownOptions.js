@@ -122,6 +122,20 @@ const markdownOptions = {
         </td>
       ),
     },
+    a: {
+      component: ({ children }) => (
+        <a
+          href={children}
+          target="_blank"
+          style={{
+            textDecoration: "none",
+            cursor: "pointer",
+          }}
+        >
+          Link
+        </a>
+      ),
+    },
   },
 };
 
