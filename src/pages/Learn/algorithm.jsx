@@ -151,7 +151,7 @@ const Algorithm = () => {
             name="Desc"
             rules={[{ required: true, message: "Please input Intro" }]}
           >
-            <Input.TextArea showCount maxLength={100} />
+            <Input.TextArea showCount maxLength={300} />
           </Form.Item>
 
           <Form.Item>
